@@ -3,7 +3,7 @@
 #include <cxxabi.h>
 #include <memory>
 
-#define GERROR(msg) std::runtime_error(std::string(__FILE__) + ':' + std::to_string(__LINE__) + ':' + std::string(msg))
+#define GERROR(msg) std::runtime_error(std::string(__FILE__) + ':' + std::to_string(__LINE__) + ": " + std::string(msg))
 
 inline std::string demangle(const char* name) {
     int status = 0;

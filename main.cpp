@@ -88,19 +88,22 @@ struct p {
 };
 
 int main() {
-    ArrayList<p> a(0); // 1) Standard
-    p var(2);          // 2) Standard (normal)
-    a.emplace(3)       // 3) Empty (expand); Standard (emplace)
-     .append(p(3))     // 4) Standard (p); 2*Empty, Move=, Destroy (expand); Move= (append); Destroy (p)
-     .append(var);     // 5) 4*Empty, 2*Move=, 2*Destroy (expand); Copy= (append)
-    
+    ArrayList<p> a(3);
+    a.emplace(1).emplace(2); // [1, 2]
     std::cout << a << '\n';
-    p temp = a.remove(1); // 6) Move (p); Move= (remove) 
-    std::cout << temp << '\n';
+    a.grow(1, 3);            // [1, 3, 2]
+    a.grow(1, 4);            // [1, 4, 3, 2]
+    std::cout << a << '\n';
+    a.erase(1);              // [1, 3, 2]
     std::cout << a << '\n';
 
-    // 7) Destroy (var, temp)
-    // 8) Destroy (a)
-    // 9) Destroy (a.data)
+    ArrayList<p> b;
+    ArrayList c = std::move(b = a);
+    std::cout << a << '\n' << b << '\n' << c << '\n';
+    
+    p temp(10);
+    a[1] = std::move(temp);
+    std::cout << temp << '\n';
+    std::cout << a << '\n' << b << '\n' << c << '\n';
     return 0;
 }

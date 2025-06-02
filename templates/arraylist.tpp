@@ -15,9 +15,9 @@ void ArrayList<T>::expand() {
     }
     
     if constexpr(std::is_trivially_copyable_v<T>) {
-        std::copy(data, data + capacity, new_data);
+        std::copy(data, data + size, new_data);
     } else {
-        for (size_t i = 0; i < capacity; i++) {
+        for (size_t i = 0; i < size; i++) {
             new_data[i] = std::move(data[i]);
         }
     }
@@ -65,7 +65,7 @@ ArrayList<T>::ArrayList(ArrayList<T>&& other) noexcept {
 // copy assignment operator
 template <typename T>
 ArrayList<T>& ArrayList<T>::operator=(const ArrayList<T>& other) {
-    CONSTRUCTOR(" Copy assignment called!\n");
+    CONSTRUCTOR("Copy assignment called!\n");
     if (this != &other) {
         delete[] data;
         data = new T[other.capacity];
@@ -102,21 +102,64 @@ ArrayList<T>& ArrayList<T>::operator=(ArrayList<T>&& other) noexcept {
 }
 
 template <typename T>
-ArrayList<T>& ArrayList<T>::append(const T& obj) {
+template <typename U>
+ArrayList<T>& ArrayList<T>::append(U&& obj) {
     if (size == capacity) expand();
-
-    data[size++] = obj;
+    data[size++] = std::forward<U>(obj);
 
     return *this;
 }
 
 template <typename T>
-ArrayList<T>& ArrayList<T>::append(T&& obj) {
-    if (size == capacity) {
-        expand();
+template <typename... Args>
+inline ArrayList<T>& ArrayList<T>::emplace(Args&& ...args) {
+    if (size >= capacity) expand();
+    data[size].~T();
+    new (&data[size++]) T(std::forward<Args>(args)...);
+
+    return *this;
+}
+
+template <typename T>
+template <typename U>
+ArrayList<T>& ArrayList<T>::insert(size_t i, U&& obj) {
+    if (i > size) {
+        throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
+    } else if (i == size) {
+        append(std::forward<U>(obj));
+        return *this;
     }
 
-    data[size++] = std::forward<T>(obj);
+    if (size == capacity) expand();
+
+    for (size_t j = size - 1; j >= i; j--) {
+        data[j + 1] = std::move(data[j]);
+    }
+
+    data[i] = std::forward<U>(obj);
+    size++;
+
+    return *this;
+}
+
+template <typename T>
+template <typename... Args>
+ArrayList<T> &ArrayList<T>::grow(size_t i, Args&&... args) {
+    if (i > size) {
+        throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
+    } else if (i == size) {
+        emplace(std::forward<Args>(args)...);
+        return *this;
+    }
+
+    if (size == capacity) expand();
+
+    for (size_t j = size - 1; j >= i; j--) {
+        data[j + 1] = std::move(data[j]);
+    }
+
+    new (&data[i]) T(std::forward<Args>(args)...);
+    size++;
 
     return *this;
 }
@@ -133,9 +176,7 @@ T &ArrayList<T>::operator[](size_t i)
 
 template <typename T>
 T ArrayList<T>::remove(size_t i) {
-    if (i >= size) {
-        throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
-    }
+    if (i >= size) throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
 
     T temp = std::move(data[i]);
 
@@ -145,6 +186,17 @@ T ArrayList<T>::remove(size_t i) {
     
     size--;
     return temp;
+}
+
+template <typename T>
+void ArrayList<T>::erase(size_t i) {
+    if (i >= size) throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
+
+    for (size_t j = i; j < size - 1; j++) {
+        data[j] = std::move(data[j + 1]);
+    }
+    
+    size--;
 }
 
 // destructor

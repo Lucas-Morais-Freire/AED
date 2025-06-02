@@ -12,7 +12,7 @@ protected:
 public:
     // constructors
     ArrayList(size_t capacity);
-    ArrayList() : ArrayList(10) {};
+    ArrayList() : ArrayList(0) {};
     ArrayList(const ArrayList& other);
     ArrayList(ArrayList&& other) noexcept;
 
@@ -24,13 +24,25 @@ public:
     ArrayList& operator=(ArrayList&& other) noexcept;
     
     // CRUD
-    ArrayList& append(const T& obj);    // create
-    ArrayList& append(T&& obj);         // move
+
+    // Add item to end (move, copy)
+    template <typename U>
+    ArrayList& append(U&& obj);
+    // Constructs item at end (append but create in-place)
     template <typename... Args>
-    ArrayList& emplace(Args&&... args); // emplace
-    T& operator[](size_t i);            // read, update
-    T remove(size_t i);                 // remove
-    void erase(size_t i);               // erase
+    ArrayList& emplace(Args&&... args);
+    // insert item at position (move, copy)
+    template <typename U>
+    ArrayList& insert(size_t i, U&& obj);
+    // Constructs item at position (insert but create in-place)
+    template <typename... Args>
+    ArrayList& grow(size_t i, Args&&... args);
+    // read, update
+    T& operator[](size_t i);
+    // remove (returns removed item)
+    T remove(size_t i);
+    // erase (simply destroys item)
+    void erase(size_t i);
 
     // ostream interface
     template <typename U>
@@ -38,12 +50,3 @@ public:
 };
 
 #include <arraylist.tpp>
-
-template <typename T>
-template <typename... Args>
-inline ArrayList<T>& ArrayList<T>::emplace(Args&& ...args) {
-    if (size >= capacity) expand();
-    new (&data[size++]) T(std::forward<Args>(args)...);
-
-    return *this;
-}
