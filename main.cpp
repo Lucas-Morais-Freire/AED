@@ -4,6 +4,7 @@
 
 // 1st-party
 #include <arraylist.h>
+#include <linkedlist.h>
 
 struct p {
     size_t* v;
@@ -88,22 +89,23 @@ struct p {
 };
 
 int main() {
-    ArrayList<p> a(3);
-    a.emplace(1).emplace(2); // [1, 2]
-    std::cout << a << '\n';
-    a.grow(1, 3);            // [1, 3, 2]
-    a.grow(1, 4);            // [1, 4, 3, 2]
-    std::cout << a << '\n';
-    a.erase(1);              // [1, 3, 2]
-    std::cout << a << '\n';
-
-    ArrayList<p> b;
-    ArrayList c = std::move(b = a);
-    std::cout << a << '\n' << b << '\n' << c << '\n';
+    LinkedList<int> list;
+    list.append(-1);
+    list.prepend(0);
     
-    p temp(10);
-    a[1] = std::move(temp);
-    std::cout << temp << '\n';
-    std::cout << a << '\n' << b << '\n' << c << '\n';
+    for (size_t i = 1; i < 11; i++) {
+        list.insert(i, list.size()/2);
+    }
+
+    list.print();
+    list.remove(2);
+    list.print();
+    list.remove(0);
+    list.print();
+    list.remove(list.size());
+    list.print();
+    list.remove(list.size() - 1);
+    list.print();
+
     return 0;
 }
