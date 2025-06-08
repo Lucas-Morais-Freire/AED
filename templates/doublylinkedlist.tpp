@@ -88,7 +88,7 @@ bool DoublyLinkedList<T>::insert(T data, size_t pos) {
 template <typename T>
 T& DoublyLinkedList<T>::operator[](size_t pos) {
     if (pos >= n) {
-        throw std::runtime_error("Invalid position: " + std::to_string(pos));
+        throw GERROR("Invalid position: " + std::to_string(pos));
     }
 
     // navigate. Land exactly on the right position.

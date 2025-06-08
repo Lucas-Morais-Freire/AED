@@ -6,6 +6,7 @@
 #include <arraylist.h>
 #include <linkedlist.h>
 #include <doublylinkedlist.h>
+#include <arraystack.h>
 
 struct p {
     size_t* v;
@@ -90,26 +91,16 @@ struct p {
 };
 
 int main() {
-    DoublyLinkedList<int> list;
-    
+    ArrayStack<int> stack;
+
     for (size_t i = 0; i < 10; i++) {
-        list.insert(i, list.size()/4);
+        stack.push(i);
     }
+    stack.print();
 
-    for (size_t i = 10; i < 20; i++) {
-        list.insert(i, (3*list.size())/4);
-    }
-
-    list.print();
-    list.remove(8);
-    list.remove(0);
-    list.remove(1);
-    list.remove(list.size() - 1);
-    list.remove(list.size() - 2);
-    list.print();
-    list.print_r();
-
-    list.print();
+    stack.remove();
+    std::cout << stack.pop() << '\n';
+    stack.print();
 
     return 0;
 }

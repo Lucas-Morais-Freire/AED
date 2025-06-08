@@ -165,8 +165,7 @@ ArrayList<T> &ArrayList<T>::grow(size_t i, Args&&... args) {
 }
 
 template <typename T>
-T &ArrayList<T>::operator[](size_t i)
-{
+T &ArrayList<T>::operator[](size_t i) {
     if (i >= this->size) {
         throw GERROR("Index " + std::to_string(i) + " is out of bounds.");
     }
