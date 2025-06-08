@@ -5,6 +5,7 @@
 // 1st-party
 #include <arraylist.h>
 #include <linkedlist.h>
+#include <doublylinkedlist.h>
 
 struct p {
     size_t* v;
@@ -89,22 +90,25 @@ struct p {
 };
 
 int main() {
-    LinkedList<int> list;
-    list.append(-1);
-    list.prepend(0);
+    DoublyLinkedList<int> list;
     
-    for (size_t i = 1; i < 11; i++) {
-        list.insert(i, list.size()/2);
+    for (size_t i = 0; i < 10; i++) {
+        list.insert(i, list.size()/4);
+    }
+
+    for (size_t i = 10; i < 20; i++) {
+        list.insert(i, (3*list.size())/4);
     }
 
     list.print();
-    list.remove(2);
-    list.print();
+    list.remove(8);
     list.remove(0);
-    list.print();
-    list.remove(list.size());
-    list.print();
+    list.remove(1);
     list.remove(list.size() - 1);
+    list.remove(list.size() - 2);
+    list.print();
+    list.print_r();
+
     list.print();
 
     return 0;
