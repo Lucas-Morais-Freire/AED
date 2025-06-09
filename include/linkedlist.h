@@ -3,7 +3,7 @@
 
 template <typename T>
 class LinkedList {
-private:
+protected:
     struct node {
         T data;
         node* next;

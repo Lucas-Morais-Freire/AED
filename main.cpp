@@ -7,6 +7,8 @@
 #include <linkedlist.h>
 #include <doublylinkedlist.h>
 #include <arraystack.h>
+#include <linkedstack.h>
+#include <arrayqueue.h>
 
 struct p {
     size_t* v;
@@ -91,16 +93,26 @@ struct p {
 };
 
 int main() {
-    ArrayStack<int> stack;
+    ArrayQueue<int> queue(1);
 
-    for (size_t i = 0; i < 10; i++) {
-        stack.push(i);
+    queue.enqueue(-1);
+    queue.enqueue(-2);
+    queue.dequeue();
+    queue.dequeue();
+    queue.enqueue(-30);
+    queue.enqueue(-32);
+    queue.enqueue(-42);
+    queue.dequeue();
+    queue.enqueue(54);
+    queue.enqueue(-6);
+    queue.inner_print();
+    queue.enqueue(-90);
+    queue.inner_print();
+    while (queue.size() > 0) {
+        queue.dequeue();
     }
-    stack.print();
-
-    stack.remove();
-    std::cout << stack.pop() << '\n';
-    stack.print();
+    queue.enqueue(1);
+    queue.inner_print();
 
     return 0;
 }
