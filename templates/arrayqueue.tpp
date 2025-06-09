@@ -84,7 +84,7 @@ void ArrayQueue<T>::print() {
 
 template <typename T>
 void ArrayQueue<T>::inner_print() {
-    if (_size == 0) {
+    if (_cap == 0) {
         std::cout << "[]\n";
         return;
     }
@@ -93,39 +93,32 @@ void ArrayQueue<T>::inner_print() {
 
     ArrayList<size_t> sizes(_size);
 
-    if (_top > _bottom) {
-        if (0 < _bottom) {
-            std::cout << " ";
-            sizes.emplace(1);
-        } else { 
-            std::cout << _data[0];
-            sizes.emplace(std::to_string(_data[0]).size());
-        }
-        for (size_t i = 1; i < _cap; i++) {
-            if (i < _bottom || i >= _top) {
-                std::cout << ",  ";
-                sizes.emplace(1);
-            } else {
-                std::cout << ", " << _data[i];
-                sizes.emplace(std::to_string(_data[i]).size());
-            }
-        }
+    bool write = _bottom < _top ? _bottom == 0 : _top != 0 || _bottom == 0;
+    if (_size == 0) {
+        write = false;
+    }
+    if (write) {
+        std::cout << _data[0];
+        sizes.emplace(std::to_string(_data[0]).size());
     } else {
-        if (0 >= _top && _size != _cap) {
-            std::cout << " ";
-            sizes.emplace(1);
-        } else { 
-            std::cout << _data[0];
-            sizes.emplace(std::to_string(_data[0]).size());
+        std::cout << " ";
+        sizes.emplace(1);
+    }
+
+    for (size_t i = 1; i < _cap; i++) {
+        if (i == _top) {
+            write = !write;
         }
-        for (size_t i = 1; i < _cap; i++) {
-            if (i < _bottom && i >= _top) {
-                std::cout << ",  ";
-                sizes.emplace(1);
-            } else {
-                std::cout << ", " << _data[i];
-                sizes.emplace(std::to_string(_data[i]).size());
-            }
+        if (i == _bottom) {
+            write = !write;
+        }
+
+        if (write) {
+            std::cout << ", " << _data[i];
+            sizes.emplace(std::to_string(_data[i]).size());
+        } else {
+            std::cout << ",  ";
+            sizes.emplace(1);
         }
     }
 

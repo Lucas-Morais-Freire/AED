@@ -9,6 +9,7 @@
 #include <arraystack.h>
 #include <linkedstack.h>
 #include <arrayqueue.h>
+#include <linkedqueue.h>
 
 struct p {
     size_t* v;
@@ -93,26 +94,36 @@ struct p {
 };
 
 int main() {
-    ArrayQueue<int> queue(1);
+    LinkedQueue<int> queue;
 
     queue.enqueue(-1);
+    queue.print();
     queue.enqueue(-2);
+    queue.print();
     queue.dequeue();
+    queue.print();
     queue.dequeue();
+    queue.print();
     queue.enqueue(-30);
+    queue.print();
     queue.enqueue(-32);
+    queue.print();
     queue.enqueue(-42);
+    queue.print();
     queue.dequeue();
+    queue.print();
     queue.enqueue(54);
+    queue.print();
     queue.enqueue(-6);
-    queue.inner_print();
+    queue.print();
     queue.enqueue(-90);
-    queue.inner_print();
+    queue.print();
     while (queue.size() > 0) {
         queue.dequeue();
+        queue.print();
     }
     queue.enqueue(1);
-    queue.inner_print();
+    queue.print();
 
     return 0;
 }
