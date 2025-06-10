@@ -10,6 +10,7 @@
 #include <linkedstack.h>
 #include <arrayqueue.h>
 #include <linkedqueue.h>
+#include <avltree.h>
 
 struct p {
     size_t* v;
@@ -94,36 +95,12 @@ struct p {
 };
 
 int main() {
-    LinkedQueue<int> queue;
+    AVLTree<char> tree;
 
-    queue.enqueue(-1);
-    queue.print();
-    queue.enqueue(-2);
-    queue.print();
-    queue.dequeue();
-    queue.print();
-    queue.dequeue();
-    queue.print();
-    queue.enqueue(-30);
-    queue.print();
-    queue.enqueue(-32);
-    queue.print();
-    queue.enqueue(-42);
-    queue.print();
-    queue.dequeue();
-    queue.print();
-    queue.enqueue(54);
-    queue.print();
-    queue.enqueue(-6);
-    queue.print();
-    queue.enqueue(-90);
-    queue.print();
-    while (queue.size() > 0) {
-        queue.dequeue();
-        queue.print();
-    }
-    queue.enqueue(1);
-    queue.print();
+    std::string s = "lucasmoraisfreire";
+
+    tree.insert(s.c_str(), s.size());
+    tree.print();
 
     return 0;
 }
