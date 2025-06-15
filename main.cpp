@@ -100,7 +100,7 @@ int main() {
     std::string s = "lucasmoraisfreire";
 
     tree.insert(s.c_str(), s.size());
-    tree.print();
+    std::cout << tree.size() << '\n';
 
     return 0;
 }
