@@ -32,12 +32,17 @@ private:
     node* rebalance_RR(node* item);
     node* rebalance(node* item);
     
-    node* insert_rec(node* item, T data);
     void destroy_rec(node* item);
+
+    node* insert_rec(node* item, T data);
+
+    node* find_min(node* item);
+    node* remove_rec(node* item, T data);
+
     void print_rec(node* item, size_t offset);
     void print_bf_rec(node* item, size_t offset);
     void print_in_order_rec(node* item);
-    void pretty_print_rec(node* item, size_t depth, bool* swaps, bool right);
+    void pretty_print_rec(node* item, size_t depth, bool* swaps, bool right, size_t branch_length);
 public:
     AVLTree() : _root(nullptr), _size(0) {}
     ~AVLTree();
@@ -52,7 +57,7 @@ public:
     void print();
     void print_bf();
     void print_in_order();
-    void pretty_print();
+    void pretty_print(size_t branch_length = 3);
 };
 
 #include <avltree.tpp>

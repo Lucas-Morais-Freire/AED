@@ -1,6 +1,7 @@
 // std
 #include <iostream>
 #include <array>
+#include <random>
 
 // 1st-party
 #include <arraylist.h>
@@ -97,10 +98,18 @@ struct p {
 int main() {
     AVLTree<char> tree;
 
-    std::string s = "lucasmoraisfreire";
+    srand(time(nullptr));
+    std::string chars/* = "ukutkzvytikmjeqsdhkf"*/;
+    for (size_t i = 0; i < 20; i++) {
+        chars += (char)((rand() % 26) + 97);
+    }
 
-    tree.insert(s.c_str(), s.size());
-    std::cout << tree.size() << '\n';
+    std::cout << chars << '\n';
+    tree.insert(chars.c_str(), chars.size());
+    tree.pretty_print();
+    std::cout << "remove " << chars[0] << '\n';
+    tree.remove(chars[0]);
+    tree.pretty_print();
 
     return 0;
 }
