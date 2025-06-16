@@ -2,6 +2,7 @@
 #include <iostream>
 #include <array>
 #include <random>
+#include <unordered_map>
 
 // 1st-party
 #include <arraylist.h>
@@ -12,15 +13,16 @@
 #include <arrayqueue.h>
 #include <linkedqueue.h>
 #include <avltree.h>
+#include <hashtablenaive.h>
 
 struct p {
     size_t* v;
     size_t n;
 
-    p() : v(nullptr), n(0) {
+    p() noexcept : v(nullptr), n(0) {
         CONSTRUCTOR("Empty constructor called!\n");
     };
-    p(size_t n) : n(n) {
+    p(size_t n) noexcept : n(n) {
         CONSTRUCTOR("Standard constructor called!\n");
 
         v = new size_t[n];
@@ -29,7 +31,7 @@ struct p {
         }
     }
 
-    p(const p& other) {
+    p(const p& other) noexcept {
         CONSTRUCTOR("Copy constructor called!\n");
         v = new size_t[other.n];
         n = other.n;
@@ -38,7 +40,7 @@ struct p {
         }
     }
 
-    p(p&& other) {
+    p(p&& other) noexcept {
         CONSTRUCTOR("Move constructor called!\n");
 
         v = other.v;
@@ -47,7 +49,7 @@ struct p {
         other.n = 0;
     }
 
-    p& operator=(const p& other) {
+    p& operator=(const p& other) noexcept {
         CONSTRUCTOR("Copy assignment called!\n");
 
         if (this != &other) {
@@ -63,7 +65,7 @@ struct p {
         return *this;
     }
     
-    p& operator=(p&& other) {
+    p& operator=(p&& other) noexcept {
         CONSTRUCTOR("Move assignment called!\n");
 
         if (this != &other) {
@@ -89,27 +91,33 @@ struct p {
         return os << ']';
     }
 
-    ~p() {
+    ~p() noexcept {
         // std::cout << this << "\n";
         CONSTRUCTOR("Destructor called!\n");
     }
 };
 
-int main() {
-    AVLTree<char> tree;
-
-    srand(time(nullptr));
-    std::string chars/* = "ukutkzvytikmjeqsdhkf"*/;
-    for (size_t i = 0; i < 20; i++) {
-        chars += (char)((rand() % 26) + 97);
+struct myhash {size_t operator()(const std::string& s) {
+    size_t idx = 0;
+    for (size_t i = 0; i < s.size(); i++) {
+        idx += static_cast<size_t>(s[i]);
     }
 
-    std::cout << chars << '\n';
-    tree.insert(chars.c_str(), chars.size());
-    tree.pretty_print();
-    std::cout << "remove " << chars[0] << '\n';
-    tree.remove(chars[0]);
-    tree.pretty_print();
+    return idx;
+}};
+
+struct bruh {
+    int x = 1;
+    int y = 2;
+};
+
+int main() {
+    HashTableNaive<std::string, p, std::hash<std::string>> table(10);
+
+    table.grow("instagram", 1);
+    table.inner_print();
+    p insta = table.take("instagram");
+    std::cout << insta << '\n';
 
     return 0;
 }

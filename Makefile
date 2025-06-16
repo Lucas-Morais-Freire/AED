@@ -1,5 +1,5 @@
 COMP:=g++
-CXX_FLAGS:=-Wall -Wextra -g # -DDEBUG # -fopenmp -fcf-protection=none -fno-stack-protector -O3
+CXX_FLAGS:=-Wall -Wextra -DDEBUG # -O3 # -g -fopenmp -fcf-protection=none -fno-stack-protector
 SRCS:=$(wildcard src/*.cpp) main.cpp
 INCLUDE:=./include ./templates
 TARGET:=main
